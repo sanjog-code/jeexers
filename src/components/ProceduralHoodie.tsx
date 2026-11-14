@@ -64,6 +64,8 @@ export type GarmentPlacement =
   | 'cowl-arch'
   | 'kangaroo-pocket';
 
+export type HoodieSilhouette = 'oversized' | 'slimfit' | 'cropped';
+
 interface ProceduralHoodieProps {
   colorKey?: string;
   customHex?: string;
@@ -78,9 +80,12 @@ interface ProceduralHoodieProps {
     | 'op-sun-god'
     | 'op-straw-hat'
     | 'op-room'
-    | 'bespoke';
+    | 'bespoke'
+    | string;
   customImage?: string | null;
   placement?: GarmentPlacement;
+  customPosition?: { x: number; y: number; scale?: number };
+  silhouette?: HoodieSilhouette;
   blendMode?: 'multiply' | 'normal' | 'screen' | 'hard-light';
   opacity?: number;
   className?: string;
@@ -97,6 +102,8 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
   graphicType = 'jjk-shrine',
   customImage = null,
   placement = 'upper-back',
+  customPosition,
+  silhouette = 'oversized',
   blendMode = 'multiply',
   opacity = 0.88,
   className = '',
@@ -174,7 +181,48 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
     'kangaroo-pocket': { x: 215, y: 355, w: 170, h: 95, rx: 8 },
   };
 
-  const activeBox = placementBoxes[placement] || placementBoxes['upper-back'];
+  const defaultBox = placementBoxes[placement] || placementBoxes['upper-back'];
+  const activeBox = customPosition
+    ? {
+        x: customPosition.x,
+        y: customPosition.y,
+        w: defaultBox.w * (customPosition.scale || 1),
+        h: defaultBox.h * (customPosition.scale || 1),
+        rx: defaultBox.rx || 12,
+      }
+    : defaultBox;
+
+  // Distinct Silhouette Geometries (Oversized, Slimfit, Cropped)
+  let torsoPath = "M 194 140 C 248 152 352 152 406 140 L 438 490 C 375 500 225 500 162 490 Z";
+  let ribbingPath = "M 162 490 C 225 500 375 500 438 490 L 436 532 C 375 540 225 540 164 532 Z";
+  let ribbingHighlight = "M 170 492 C 212 502 388 502 430 492";
+  let leftSleeve = "M 194 140 L 68 288 C 58 308 64 338 80 358 L 104 382 C 112 390 126 388 132 378 L 204 256 Z";
+  let leftSleeveSeam = "M 194 140 L 78 296";
+  let rightSleeve = "M 406 140 L 532 288 C 542 308 536 338 520 358 L 496 382 C 488 390 474 388 468 378 L 396 256 Z";
+  let rightSleeveSeam = "M 406 140 L 522 296";
+  let frontPocket = "M 210 345 L 390 345 L 412 452 C 385 460 215 460 188 452 Z";
+  let pocketH1 = "M 210 345 L 188 452";
+  let pocketH2 = "M 390 345 L 412 452";
+
+  if (silhouette === 'slimfit') {
+    torsoPath = "M 205 140 C 250 148 350 148 395 140 L 412 485 C 360 492 240 492 188 485 Z";
+    ribbingPath = "M 188 485 C 240 492 360 492 412 485 L 410 522 C 360 528 240 528 190 522 Z";
+    ribbingHighlight = "M 194 487 C 235 494 365 494 406 487";
+    leftSleeve = "M 205 140 L 96 288 C 88 306 94 332 108 350 L 128 372 C 136 380 148 378 154 368 L 214 256 Z";
+    leftSleeveSeam = "M 205 140 L 106 296";
+    rightSleeve = "M 395 140 L 504 288 C 512 306 506 332 492 350 L 472 372 C 464 380 452 378 446 368 L 386 256 Z";
+    rightSleeveSeam = "M 395 140 L 494 296";
+    frontPocket = "M 220 350 L 380 350 L 398 448 C 375 455 225 455 202 448 Z";
+    pocketH1 = "M 220 350 L 202 448";
+    pocketH2 = "M 380 350 L 398 448";
+  } else if (silhouette === 'cropped') {
+    torsoPath = "M 194 140 C 248 152 352 152 406 140 L 434 395 C 375 404 225 404 166 395 Z";
+    ribbingPath = "M 166 395 C 225 404 375 404 434 395 L 432 432 C 375 440 225 440 168 432 Z";
+    ribbingHighlight = "M 172 397 C 215 406 385 406 428 397";
+    frontPocket = "M 215 305 L 385 305 L 402 385 C 375 392 225 392 198 385 Z";
+    pocketH1 = "M 215 305 L 198 385";
+    pocketH2 = "M 385 305 L 402 385";
+  }
 
   return (
     <div className={`relative flex items-center justify-center select-none ${className}`} style={{ width: size, height: 'auto', aspectRatio: '1/1' }}>
@@ -233,12 +281,12 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
 
         {/* ===================== SLEEVES ===================== */}
         <path
-          d="M 194 140 L 68 288 C 58 308 64 338 80 358 L 104 382 C 112 390 126 388 132 378 L 204 256 Z"
+          d={leftSleeve}
           fill={`url(#${bodyGradId})`}
           stroke={shadowColor}
           strokeWidth="1.5"
         />
-        <path d="M 194 140 L 78 296" stroke={highlightColor} strokeWidth="1" strokeOpacity="0.35" strokeDasharray="3 2" />
+        <path d={leftSleeveSeam} stroke={highlightColor} strokeWidth="1" strokeOpacity="0.35" strokeDasharray="3 2" />
         <path
           d="M 84 362 L 104 382 C 114 392 128 386 133 376 L 122 362 Z"
           fill={`url(#${cuffGradId})`}
@@ -247,12 +295,12 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
         />
 
         <path
-          d="M 406 140 L 532 288 C 542 308 536 338 520 358 L 496 382 C 488 390 474 388 468 378 L 396 256 Z"
+          d={rightSleeve}
           fill={`url(#${bodyGradId})`}
           stroke={shadowColor}
           strokeWidth="1.5"
         />
-        <path d="M 406 140 L 522 296" stroke={highlightColor} strokeWidth="1" strokeOpacity="0.35" strokeDasharray="3 2" />
+        <path d={rightSleeveSeam} stroke={highlightColor} strokeWidth="1" strokeOpacity="0.35" strokeDasharray="3 2" />
         <path
           d="M 516 362 L 496 382 C 486 392 472 386 467 376 L 478 362 Z"
           fill={`url(#${cuffGradId})`}
@@ -262,7 +310,7 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
 
         {/* ===================== TORSO BODY ===================== */}
         <path
-          d="M 194 140 C 248 152 352 152 406 140 L 438 490 C 375 500 225 500 162 490 Z"
+          d={torsoPath}
           fill={`url(#${bodyGradId})`}
           stroke={shadowColor}
           strokeWidth="1.5"
@@ -270,25 +318,25 @@ export const ProceduralHoodie: React.FC<ProceduralHoodieProps> = ({
 
         {/* Waistband Ribbing */}
         <path
-          d="M 162 490 C 225 500 375 500 438 490 L 436 532 C 375 540 225 540 164 532 Z"
+          d={ribbingPath}
           fill={`url(#${cuffGradId})`}
           stroke={shadowColor}
           strokeWidth="1.2"
         />
-        <path d="M 170 492 C 212 502 388 502 430 492" stroke={highlightColor} strokeWidth="1" strokeOpacity="0.25" strokeDasharray="4 2" />
+        <path d={ribbingHighlight} stroke={highlightColor} strokeWidth="1" strokeOpacity="0.25" strokeDasharray="4 2" />
 
         {/* ===================== VIEW LAYER ===================== */}
         {view === 'front' ? (
           <g>
             {/* Kangaroo Pocket */}
             <path
-              d="M 210 345 L 390 345 L 412 452 C 385 460 215 460 188 452 Z"
+              d={frontPocket}
               fill={`url(#${pocketGradId})`}
               stroke={shadowColor}
               strokeWidth="1.5"
             />
-            <path d="M 210 345 L 188 452" stroke={highlightColor} strokeWidth="1.5" strokeOpacity="0.4" />
-            <path d="M 390 345 L 412 452" stroke={highlightColor} strokeWidth="1.5" strokeOpacity="0.4" />
+            <path d={pocketH1} stroke={highlightColor} strokeWidth="1.5" strokeOpacity="0.4" />
+            <path d={pocketH2} stroke={highlightColor} strokeWidth="1.5" strokeOpacity="0.4" />
 
             <path d="M 235 210 C 265 235 295 240 330 225" stroke={shadowColor} strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
             <path d="M 215 260 C 260 285 330 285 385 270" stroke={shadowColor} strokeWidth="2" strokeLinecap="round" opacity="0.25" />

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import type { CartEntry } from '../types';
 import { ProceduralHoodie } from './ProceduralHoodie';
-import { ArrowLeft, CheckCircle2, Lock, ShieldCheck } from 'lucide-react';
+import { ACTIVE_COUPONS } from '../data/products';
+import type { CouponCode } from '../data/products';
+import { ArrowLeft, CheckCircle2, Lock, ShieldCheck, Tag, Sparkles, Check, AlertCircle } from 'lucide-react';
 
 interface CheckoutSpaceProps {
   cart: CartEntry[];
@@ -27,9 +29,48 @@ export const CheckoutSpace: React.FC<CheckoutSpaceProps> = ({
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [orderId, setOrderId] = useState('');
 
+  // Coupon & Email Signup State
+  const [couponCodeInput, setCouponCodeInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponCode | null>(null);
+  const [couponError, setCouponError] = useState('');
+  const [subscriberEmail, setSubscriberEmail] = useState('');
+  const [emailUnlockedSuccess, setEmailUnlockedSuccess] = useState(false);
+
   const subtotal = cart.reduce((acc, item) => acc + item.hoodie.price * item.quantity, 0);
+  const discountAmount = appliedCoupon ? Math.round((subtotal * appliedCoupon.discountPercent) / 100) : 0;
   const shipping = subtotal > 0 ? 0 : 0; // Complimentary worldwide shipping
-  const total = subtotal + shipping;
+  const total = Math.max(0, subtotal - discountAmount + shipping);
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = couponCodeInput.trim().toUpperCase();
+    const found = ACTIVE_COUPONS.find((c) => c.code === clean);
+    if (found) {
+      setAppliedCoupon(found);
+      setCouponError('');
+    } else {
+      setCouponError("Invalid code. Sign up below to unlock 'RELEASE15' (15% OFF)!");
+    }
+  };
+
+  const handleEmailSignupUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!subscriberEmail.trim() || !subscriberEmail.includes('@')) return;
+
+    // Apply the 15% discount code automatically
+    const releaseCoupon = ACTIVE_COUPONS.find((c) => c.code === 'RELEASE15') || {
+      code: 'RELEASE15',
+      discountPercent: 15,
+      description: '15% Off - Release List Subscriber Exclusive',
+    };
+
+    setAppliedCoupon(releaseCoupon);
+    setCouponCodeInput('RELEASE15');
+    if (!email) {
+      setEmail(subscriberEmail);
+    }
+    setEmailUnlockedSuccess(true);
+  };
 
   const handleFillTestCredentials = () => {
     setEmail('atelier.collector@thejeexers.com');
@@ -351,11 +392,116 @@ export const CheckoutSpace: React.FC<CheckoutSpaceProps> = ({
             ))}
           </div>
 
+          {/* Coupon Code Input & Application */}
+          <div className="space-y-3 pt-3 border-t border-[var(--border-hairline)] font-mono text-xs">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-1">
+                <Tag className="w-3 h-3 text-[var(--accent)]" />
+                DISCOUNT COUPON CODE
+              </span>
+              {appliedCoupon && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAppliedCoupon(null);
+                    setCouponCodeInput('');
+                  }}
+                  className="text-[10px] text-red-400 hover:underline uppercase"
+                >
+                  Remove Code
+                </button>
+              )}
+            </div>
+
+            <form onSubmit={handleApplyCoupon} className="flex gap-2">
+              <input
+                type="text"
+                value={couponCodeInput}
+                onChange={(e) => {
+                  setCouponCodeInput(e.target.value);
+                  setCouponError('');
+                }}
+                placeholder="PROMO CODE"
+                className="flex-1 px-3.5 py-2.5 bg-[var(--bg-canvas)] border border-[var(--border-subtle)] rounded-xl text-xs font-mono uppercase text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--text-primary)]"
+              />
+              <button
+                type="submit"
+                className="py-2.5 px-4 rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold text-xs uppercase hover:opacity-90 shrink-0"
+              >
+                APPLY
+              </button>
+            </form>
+
+            {appliedCoupon && (
+              <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] flex items-center justify-between">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <Check className="w-3.5 h-3.5" />
+                  {appliedCoupon.code} APPLIED (-{appliedCoupon.discountPercent}%)
+                </span>
+                <span className="tabular-nums font-bold">-${discountAmount}.00</span>
+              </div>
+            )}
+
+            {couponError && (
+              <p className="text-[11px] text-red-400 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                {couponError}
+              </p>
+            )}
+          </div>
+
+          {/* Email Signup Exclusive Discount Banner */}
+          {!appliedCoupon && (
+            <div className="p-4 rounded-2xl bg-[var(--bg-canvas)] border border-[var(--border-subtle)] space-y-3 font-sans">
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono tracking-widest text-[var(--accent)] font-bold uppercase flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  WANT 15% OFF THIS ORDER?
+                </span>
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+                  Join the <strong>Release List</strong> below to unlock code <span className="font-mono font-bold text-[var(--text-primary)]">RELEASE15</span>. Email subscribers get first access to drops, secret giveaways, and guaranteed pre-booking on upcoming anime editions.
+                </p>
+              </div>
+
+              {emailUnlockedSuccess ? (
+                <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" />
+                  WELCOME! CODE 'RELEASE15' APPLIED (-15%).
+                </div>
+              ) : (
+                <form onSubmit={handleEmailSignupUnlock} className="flex gap-2">
+                  <input
+                    type="email"
+                    required
+                    value={subscriberEmail}
+                    onChange={(e) => setSubscriberEmail(e.target.value)}
+                    placeholder="Enter email to unlock 15% off..."
+                    className="flex-1 px-3 py-2 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="py-2 px-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-[11px] uppercase tracking-wider shrink-0 transition-colors"
+                  >
+                    UNLOCK 15%
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
+
           <div className="space-y-2 pt-2 border-t border-[var(--border-hairline)] text-xs font-mono">
             <div className="flex justify-between text-[var(--text-secondary)]">
               <span>SUBTOTAL</span>
               <span className="text-[var(--text-primary)] tabular-nums font-bold">${subtotal}.00</span>
             </div>
+
+            {appliedCoupon && (
+              <div className="flex justify-between text-emerald-400 font-bold">
+                <span>DISCOUNT ({appliedCoupon.code})</span>
+                <span className="tabular-nums">-${discountAmount}.00</span>
+              </div>
+            )}
+
             <div className="flex justify-between text-[var(--text-secondary)]">
               <span>WORLDWIDE FREIGHT</span>
               <span className="text-emerald-400 font-bold">COMPLIMENTARY</span>

@@ -57,9 +57,18 @@ export const App: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
 
+    const handleCatalogUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<HoodieItem[]>;
+      if (customEvent.detail) {
+        setCatalog(customEvent.detail);
+      }
+    };
+    window.addEventListener('jeexers-catalog-updated', handleCatalogUpdate);
+
     return () => {
       window.removeEventListener('hashchange', checkHash);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('jeexers-catalog-updated', handleCatalogUpdate);
     };
   }, []);
 

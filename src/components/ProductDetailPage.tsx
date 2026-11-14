@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import type { HoodieItem } from '../data/products';
 import { ProceduralHoodie, HOODIE_COLORWAYS } from './ProceduralHoodie';
-import { ArrowLeft, Check, RotateCw } from 'lucide-react';
+import { ArrowLeft, Check, RotateCw, AlertTriangle, Layers } from 'lucide-react';
 
 interface ProductDetailPageProps {
   hoodie: HoodieItem;
@@ -27,7 +27,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [addedAnimation, setAddedAnimation] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
 
+  // Stock check for currently chosen color and size
+  const stock = hoodie.inventory?.[selectedColor]?.[selectedSize] ?? 12;
+  const isOutOfStock = stock === 0;
+
   const handleAdd = () => {
+    if (isOutOfStock) return;
     const rect = stageRef.current?.getBoundingClientRect();
     onAddToCart(hoodie, selectedColor, selectedSize, rect);
     setAddedAnimation(true);
@@ -35,11 +40,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   const sizes: ('S' | 'M' | 'L' | 'XL' | 'XXL')[] = ['S', 'M', 'L', 'XL', 'XXL'];
+  const silhouetteLabel =
+    hoodie.silhouette === 'slimfit'
+      ? 'SLIM FIT (TAPERED)'
+      : hoodie.silhouette === 'cropped'
+      ? 'CROPPED (HIGH WAIST)'
+      : 'OVERSIZED (BOXY)';
 
   return (
     <div className="w-full min-h-[calc(100vh-5rem)] px-4 sm:px-6 py-6 sm:py-16 max-w-7xl mx-auto flex flex-col font-sans">
       {/* Return Button */}
-      <div className="mb-6 sm:mb-8">
+      <div className="mb-6 sm:mb-8 flex justify-between items-center">
         <button
           type="button"
           onClick={onBack}
@@ -48,6 +59,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>RETURN TO STORE</span>
         </button>
+
+        {/* Silhouette Tag */}
+        <span className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-[var(--border-subtle)] text-[var(--accent)] font-semibold flex items-center gap-1.5">
+          <Layers className="w-3 h-3" />
+          <span>{silhouetteLabel}</span>
+        </span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center flex-1">
@@ -60,7 +77,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           >
             <ProceduralHoodie
               colorKey={selectedColor}
-              graphicType={hoodie.graphicType}
+              graphicType={hoodie.graphicType as any}
+              customImage={hoodie.customArtworkUrl}
+              silhouette={hoodie.silhouette || 'oversized'}
+              customPosition={hoodie.graphicPosition}
               view={selectedView}
               size="100%"
               showBacklight={true}
@@ -75,7 +95,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               onClick={() => setSelectedView('back')}
               className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
                 selectedView === 'back'
-                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
               }`}
             >
@@ -86,7 +106,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               onClick={() => setSelectedView('front')}
               className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
                 selectedView === 'front'
-                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold'
+                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
               }`}
             >
@@ -97,7 +117,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         </div>
 
         {/* Right: Architectural Config Form */}
-        <div className="lg:col-span-5 flex flex-col justify-center space-y-6 sm:space-y-10">
+        <div className="lg:col-span-5 flex flex-col justify-center space-y-6 sm:space-y-8">
           <div>
             <div className="text-[11px] font-mono tracking-[0.3em] text-[var(--text-muted)] uppercase mb-2">
               {hoodie.series} COLLECTION
@@ -105,13 +125,27 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <h1 className="text-2xl sm:text-4xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase">
               {hoodie.name}
             </h1>
-            <div className="mt-2 sm:mt-3 text-xl sm:text-2xl font-mono text-[var(--text-primary)] tabular-nums font-bold">
+            <div className="mt-2 text-xl sm:text-2xl font-mono text-[var(--text-primary)] tabular-nums font-bold">
               ${hoodie.price}.00
             </div>
             {hoodie.description && (
               <p className="mt-3 text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
                 {hoodie.description}
               </p>
+            )}
+
+            {/* Tags */}
+            {hoodie.tags && hoodie.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {hoodie.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-[var(--border-hairline)] text-[var(--text-muted)] bg-[var(--bg-surface)]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
 
@@ -122,7 +156,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 COLORWAY
               </span>
               <span className="text-xs font-mono tracking-widest text-[var(--text-primary)] font-bold">
-                {HOODIE_COLORWAYS[selectedColor]?.name}
+                {HOODIE_COLORWAYS[selectedColor]?.name || selectedColor}
               </span>
             </div>
             <div className="flex flex-wrap gap-2.5 sm:gap-3">
@@ -134,7 +168,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     key={colorKey}
                     type="button"
                     onClick={() => setSelectedColor(colorKey)}
-                    aria-label={`Select ${colorObj.name} colorway`}
+                    aria-label={`Select ${colorObj?.name || colorKey} colorway`}
                     className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all border border-[var(--border-subtle)] focus:outline-none ${
                       isSelected
                         ? 'ring-2 ring-[var(--text-primary)] scale-110'
@@ -143,7 +177,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   >
                     <span
                       className="block w-full h-full rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: colorObj.hex }}
+                      style={{ backgroundColor: colorObj?.hex || '#333' }}
                     >
                       {isSelected && (
                         <span
@@ -160,26 +194,56 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
           </div>
 
-          {/* Clean Size Selector */}
+          {/* Size Selector with Live Stock Status */}
           <div>
-            <div className="text-xs font-mono tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-3">
-              SIZE (BOXY OVERSIZED FIT)
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-xs font-mono tracking-[0.2em] uppercase text-[var(--text-secondary)]">
+                SIZE ({silhouetteLabel})
+              </span>
+              {/* Dynamic Stock Indicator */}
+              <span className="text-[11px] font-mono">
+                {isOutOfStock ? (
+                  <span className="text-red-400 font-bold flex items-center gap-1">
+                    <AlertTriangle className="w-3 h-3" />
+                    OUT OF STOCK
+                  </span>
+                ) : stock <= 3 ? (
+                  <span className="text-amber-400 font-semibold">
+                    ONLY {stock} LEFT IN STOCK
+                  </span>
+                ) : (
+                  <span className="text-emerald-400 font-semibold">
+                    IN STOCK ({stock} PIECES)
+                  </span>
+                )}
+              </span>
             </div>
+
             <div className="grid grid-cols-5 gap-2">
-              {sizes.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setSelectedSize(s)}
-                  className={`py-2.5 sm:py-3 text-xs font-mono tracking-wider rounded-lg transition-all focus:outline-none border ${
-                    selectedSize === s
-                      ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold border-[var(--text-primary)]'
-                      : 'border-[var(--border-hairline)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-subtle)]'
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+              {sizes.map((s) => {
+                const szStock = hoodie.inventory?.[selectedColor]?.[s] ?? 10;
+                const szOos = szStock === 0;
+
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSelectedSize(s)}
+                    className={`py-2.5 sm:py-3 text-xs font-mono tracking-wider rounded-lg transition-all focus:outline-none border relative ${
+                      selectedSize === s
+                        ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold border-[var(--text-primary)] shadow'
+                        : 'border-[var(--border-hairline)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-subtle)]'
+                    } ${szOos ? 'opacity-40' : ''}`}
+                  >
+                    <span>{s}</span>
+                    {szOos && (
+                      <span className="block text-[8px] text-red-400 uppercase font-bold leading-none mt-0.5">
+                        OOS
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -187,14 +251,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="pt-2 sm:pt-4 space-y-3 sm:space-y-4">
             <button
               type="button"
+              disabled={isOutOfStock}
               onClick={handleAdd}
               className={`w-full py-4 px-8 text-xs font-mono tracking-[0.25em] uppercase font-bold rounded-xl transition-all duration-300 focus:outline-none shadow-xl flex items-center justify-center space-x-2 ${
-                addedAnimation
+                isOutOfStock
+                  ? 'bg-red-500/20 text-red-400 border border-red-500/30 cursor-not-allowed'
+                  : addedAnimation
                   ? 'bg-emerald-500 text-black'
-                  : 'bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:opacity-90'
+                  : 'bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:opacity-90 cursor-pointer'
               }`}
             >
-              {addedAnimation ? (
+              {isOutOfStock ? (
+                <span>SIZE / COLORWAY OUT OF STOCK</span>
+              ) : addedAnimation ? (
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4" />
                   <span>PACKED IN BAG</span>
@@ -203,8 +272,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <span>ADD TO BAG (${hoodie.price})</span>
               )}
             </button>
+
             <p className="text-[11px] font-mono tracking-wider text-[var(--text-muted)] text-center uppercase">
-              Heavyweight 100% Cotton Fleece • Oversized Streetwear Fit
+              Heavyweight 100% Cotton Fleece • {silhouetteLabel}
             </p>
           </div>
         </div>

@@ -1,7 +1,9 @@
+export type HoodieSilhouette = 'oversized' | 'slimfit' | 'cropped';
+
 export interface HoodieItem {
   id: string;
   name: string;
-  series: 'JJK' | 'BERSERK' | 'DBS' | 'ONE-PIECE' | 'CUSTOM' | 'BESPOKE';
+  series: string;
   price: number;
   graphicType:
     | 'jjk-shrine'
@@ -13,13 +15,47 @@ export interface HoodieItem {
     | 'op-sun-god'
     | 'op-straw-hat'
     | 'op-room'
-    | 'bespoke';
+    | 'bespoke'
+    | string;
   defaultColor: string;
   availableColors: string[];
   description?: string;
   hasFrontDesign?: boolean;
   customArtworkUrl?: string;
+  silhouette?: HoodieSilhouette;
+  tags?: string[];
+  graphicPosition?: { x: number; y: number; scale?: number };
+  inventory?: Record<string, Record<'S' | 'M' | 'L' | 'XL' | 'XXL', number>>;
 }
+
+export const createDefaultInventory = (
+  colors: string[],
+  defaultQty = 15
+): Record<string, Record<'S' | 'M' | 'L' | 'XL' | 'XXL', number>> => {
+  const inv: Record<string, Record<'S' | 'M' | 'L' | 'XL' | 'XXL', number>> = {};
+  colors.forEach((col) => {
+    inv[col] = {
+      S: defaultQty,
+      M: defaultQty,
+      L: defaultQty,
+      XL: defaultQty,
+      XXL: defaultQty,
+    };
+  });
+  return inv;
+};
+
+export interface CouponCode {
+  code: string;
+  discountPercent: number;
+  description: string;
+}
+
+export const ACTIVE_COUPONS: CouponCode[] = [
+  { code: 'RELEASE15', discountPercent: 15, description: '15% Off - Release List Exclusive' },
+  { code: 'JEEXERS10', discountPercent: 10, description: '10% Off Welcome Pass' },
+  { code: 'PREBOOK20', discountPercent: 20, description: '20% Off Pre-Booking & VIP Access' },
+];
 
 export const HOODIE_COLLECTION: HoodieItem[] = [
   // 1. Jujutsu Kaisen Series
@@ -254,16 +290,38 @@ export const HOODIE_COLLECTION: HoodieItem[] = [
 ];
 
 export const getActiveCatalog = (): HoodieItem[] => {
+  let list: HoodieItem[] = HOODIE_COLLECTION;
   try {
-    const saved = localStorage.getItem('jeexers_custom_catalog');
+    const saved = localStorage.getItem('jeexers_catalog_live') || localStorage.getItem('jeexers_custom_catalog');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        list = parsed;
       }
     }
   } catch {
     // fallback
   }
-  return HOODIE_COLLECTION;
+
+  // Ensure all items have silhouette, tags and inventory initialized
+  return list.map((item, idx) => ({
+    ...item,
+    silhouette: item.silhouette || (idx % 3 === 0 ? 'oversized' : idx % 3 === 1 ? 'slimfit' : 'cropped'),
+    tags: item.tags || [
+      item.series.toLowerCase(),
+      item.name.toLowerCase().split(' ')[0],
+      idx % 3 === 0 ? 'oversized' : idx % 3 === 1 ? 'slimfit' : 'cropped',
+      item.hasFrontDesign ? 'dual-print' : 'back-print',
+    ],
+    inventory: item.inventory || createDefaultInventory(item.availableColors, 12),
+  }));
+};
+
+export const saveActiveCatalog = (items: HoodieItem[]) => {
+  try {
+    localStorage.setItem('jeexers_catalog_live', JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent('jeexers-catalog-updated', { detail: items }));
+  } catch (err) {
+    console.error('Failed to save catalog to localStorage', err);
+  }
 };
