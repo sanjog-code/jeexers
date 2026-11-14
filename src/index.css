@@ -1,0 +1,384 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   JEEXERS ARCHIVAL TYPOGRAPHY SYSTEM
+   1. Brand Logo: Round 8 by Atipo
+   2. Hero Editorial Texts: Clash Display Variable (Fontshare / ITF)
+   3. Body, UI, Specs, Navigation: Neue Metana Next (Dirtyline Studio)
+   4. Technical Telemetry: JetBrains Mono
+   ========================================================================== */
+
+/* --- 1. Round 8 by Atipo (Logo Font) --- */
+@font-face {
+  font-family: 'Round 8';
+  src: url('https://db.onlinewebfonts.com/t/760c3a7c48d97f8fbc0019404a5923c3.woff2') format('woff2'),
+       url('https://db.onlinewebfonts.com/t/760c3a7c48d97f8fbc0019404a5923c3.woff') format('woff'),
+       url('https://db.onlinewebfonts.com/t/760c3a7c48d97f8fbc0019404a5923c3.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ROUND 8 THREE';
+  src: url('https://db.onlinewebfonts.com/t/760c3a7c48d97f8fbc0019404a5923c3.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- 2. Neue Metana Next (Site Body & UI) --- */
+@font-face {
+  font-family: 'Neue Metana Next';
+  src: url('https://db.onlinewebfonts.com/t/61e3f59cf9f0c41d90d6e7875a56303d.woff2') format('woff2'),
+       url('https://db.onlinewebfonts.com/t/61e3f59cf9f0c41d90d6e7875a56303d.woff') format('woff'),
+       url('https://db.onlinewebfonts.com/t/61e3f59cf9f0c41d90d6e7875a56303d.ttf') format('truetype');
+  font-weight: 300 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Metana Next';
+  src: url('https://db.onlinewebfonts.com/t/4a83c37f6095a688675bd152b8392902.woff2') format('woff2'),
+       url('https://db.onlinewebfonts.com/t/4a83c37f6095a688675bd152b8392902.woff') format('woff'),
+       url('https://db.onlinewebfonts.com/t/4a83c37f6095a688675bd152b8392902.ttf') format('truetype');
+  font-weight: 600 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Metana';
+  src: url('https://db.onlinewebfonts.com/t/61e3f59cf9f0c41d90d6e7875a56303d.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Metana';
+  src: url('https://db.onlinewebfonts.com/t/4a83c37f6095a688675bd152b8392902.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* --- 3. Clash Display Variable (Hero Editorial Headlines) --- */
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/5HPV3UJUTRGUMHDLLTJKWGVPFGAKYJX3/FFBQJ5XURUJWMMBB7NX6DBDELXZR7T4I/NULWCMFPHMNO5EOBFBRF7EKVXV5JVMFB.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/2QNEFGROUS53RDOVAHQH4CNZZUWGOWOY/XHI55XFKRZLKG77T3N3QTH2YVHMLJQ5U/KVT4BC5ZH7LF4OBHM2Q7KOOZRRZZY5ZK.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/VFMK2COV3DN37JR7JQ4CAOJPZ7KWKNY7/ODD5YJNDLHZZB2MIT3DPVH4EIHAMZ34D/BSY64LPTT3OPLVKAZKL3AHKRWZ3D74AC.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/2GQIT54GKQY3JRFTSHS4ARTRNRQISSAA/3CIP5EBHRRHE5FVQU3VFROPUERNDSTDF/JTSL5QESUXATU47LCPUNHZQBDDIWDOSW.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://cdn.fontshare.com/wf/BFBSY7LX5W2U2EROCLVVTQP4VS7S4PC3/IIUX4FGTMD2LK2VWD3RVTAS4SSMUN7B5/53RZKGODFYDW3QHTIL7IPOWTBCSUEZK7.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
+@theme {
+  --font-logo: "Round 8", "ROUND 8 THREE", "Round8", "Impact", sans-serif;
+  --font-hero: "Clash Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Neue Metana Next", "NeueMetana-Regular", "Neue Metana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@layer base {
+  :root {
+    --bg-canvas: #090908;
+    --bg-surface: #121110;
+    --bg-surface-elevated: #1a1918;
+    --bg-surface-subtle: #0d0c0b;
+    --border-hairline: rgba(255, 255, 255, 0.04);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(255, 255, 255, 0.2);
+    --text-primary: #f5f2eb;
+    --text-secondary: #9c978e;
+    --text-muted: #5e5a52;
+    --accent: #d8c29d;
+    --accent-crimson: #a8251e;
+    --accent-glow: rgba(216, 194, 157, 0.06);
+    --hood-gradient: radial-gradient(circle at 50% -10%, rgba(216, 194, 157, 0.05) 0%, transparent 70%);
+    --product-backlight: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 45%, transparent 72%);
+  }
+
+  [data-theme="alabaster"] {
+    --bg-canvas: #f4f1ea;
+    --bg-surface: #eae5dc;
+    --bg-surface-elevated: #dfd9ce;
+    --bg-surface-subtle: #f8f6f0;
+    --border-hairline: rgba(0, 0, 0, 0.05);
+    --border-subtle: rgba(0, 0, 0, 0.1);
+    --border-focus: rgba(0, 0, 0, 0.3);
+    --text-primary: #121110;
+    --text-secondary: #59554d;
+    --text-muted: #8c867a;
+    --accent: #2e2c28;
+    --accent-crimson: #8f221c;
+    --accent-glow: rgba(0, 0, 0, 0.04);
+    --hood-gradient: radial-gradient(circle at 50% -10%, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
+    --product-backlight: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.09) 0%, rgba(0, 0, 0, 0.02) 45%, transparent 72%);
+  }
+
+  * {
+    border-color: var(--border-hairline);
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: "Neue Metana Next", "NeueMetana-Regular", "Neue Metana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -0.012em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Ultra-minimal invisible scrollbars */
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+  }
+}
+
+/* Explicit Typography Utility Classes */
+.font-logo {
+  font-family: "Round 8", "ROUND 8 THREE", "Round8", "Impact", sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.font-hero {
+  font-family: "Clash Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-body, .font-sans {
+  font-family: "Neue Metana Next", "NeueMetana-Regular", "Neue Metana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Ambient glow & smooth light leak */
+.hood-glow {
+  background-image: var(--hood-gradient);
+}
+
+/* ==========================================================================
+   INTERACTIVE ANIMATIONS & SPECULAR LIGHT WAVE
+   ========================================================================== */
+
+@keyframes light-wave {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.logo-light-wave {
+  background: linear-gradient(
+    100deg,
+    var(--text-primary) 0%,
+    var(--text-primary) 32%,
+    #ef4444 44%,
+    #ff6b6b 50%,
+    #ef4444 56%,
+    var(--text-primary) 68%,
+    var(--text-primary) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.65));
+  animation: light-wave 9s ease-in-out infinite;
+  display: inline-block;
+}
+
+[data-theme="alabaster"] .logo-light-wave {
+  background: linear-gradient(
+    100deg,
+    var(--text-primary) 0%,
+    var(--text-primary) 32%,
+    #b91c1c 44%,
+    #ef4444 50%,
+    #b91c1c 56%,
+    var(--text-primary) 68%,
+    var(--text-primary) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(185, 28, 28, 0.45));
+  animation: light-wave 9s ease-in-out infinite;
+}
+
+/* Global button raise without following cursor */
+button {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+button:hover:not(:disabled) {
+  transform: translateY(-2.5px);
+}
+button:active:not(:disabled) {
+  transform: translateY(0px);
+}
+
+/* Navigation: Hover Glow & Converging Edges Underline */
+.nav-link-glow {
+  position: relative;
+  transition: all 0.25s ease;
+}
+.nav-link-glow:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+  color: var(--text-primary);
+}
+[data-theme="alabaster"] .nav-link-glow:hover {
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes underline-left {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes underline-right {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+.nav-underline-converge {
+  position: relative;
+}
+.nav-underline-converge::before,
+.nav-underline-converge::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  height: 2px;
+  width: 50%;
+  background-color: var(--text-primary);
+}
+.nav-underline-converge::before {
+  left: 0;
+  transform-origin: left;
+  animation: underline-left 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.nav-underline-converge::after {
+  right: 0;
+  transform-origin: right;
+  animation: underline-right 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Product Flight into Backpack Animation */
+@keyframes flyProductIntoBag {
+  0% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 0px transparent);
+  }
+  35% {
+    transform: translate(calc(-50% + var(--target-x) * 0.35), calc(-50% + var(--target-y) * 0.15 - 60px)) scale(0.65) rotate(-6deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 16px var(--accent));
+  }
+  75% {
+    transform: translate(calc(-50% + var(--target-x) * 0.85), calc(-50% + var(--target-y) * 0.8 - 15px)) scale(0.25) rotate(4deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 24px #fff);
+  }
+  95% {
+    transform: translate(calc(-50% + var(--target-x)), calc(-50% + var(--target-y))) scale(0.08) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--target-x)), calc(-50% + var(--target-y) + 6px)) scale(0.02);
+    opacity: 0;
+  }
+}
+
+/* Backpack Unzip, Shake, & Impact Keyframes */
+@keyframes bag-unzip-shake {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.22) rotate(-8deg); }
+  45% { transform: scale(1.28) rotate(8deg); }
+  65% { transform: scale(1.25) rotate(-4deg); }
+  85% { transform: scale(1.2) rotate(2deg); }
+  100% { transform: scale(1.18) rotate(0deg); }
+}
+
+@keyframes bag-zip-impact {
+  0% { transform: scale(1.35) rotate(-10deg); }
+  25% { transform: scale(1.4) rotate(10deg); }
+  50% { transform: scale(0.85) rotate(-4deg); }
+  75% { transform: scale(1.12) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.animate-bag-unzip {
+  animation: bag-unzip-shake 0.45s ease-in-out forwards;
+}
+.animate-bag-impact {
+  animation: bag-zip-impact 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.aurora-subtle {
+  background: radial-gradient(ellipse at 50% 0%, rgba(216, 194, 157, 0.04) 0%, transparent 65%);
+}
+
+.eclipse-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(168, 37, 30, 0.08) 0%, transparent 60%);
+}
+
+.silver-ki-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(220, 225, 235, 0.08) 0%, transparent 60%);
+}
+
+/* Texture overlay for raw garment grain feel */
+.fabric-noise {
+  background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+[data-theme="alabaster"] .fabric-noise {
+  background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
+}
