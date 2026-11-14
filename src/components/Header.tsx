@@ -92,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            BESPOKE
+            CUSTOM HOODIES
           </button>
           <button
             type="button"
@@ -189,7 +189,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-[var(--text-secondary)]'
             }`}
           >
-            BESPOKE
+            CUSTOM HOODIES
           </button>
           <button
             type="button"

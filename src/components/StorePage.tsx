@@ -8,19 +8,21 @@ interface StorePageProps {
   onSelectHoodie: (item: HoodieItem) => void;
   selectedSeries: string;
   onSeriesChange: (series: string) => void;
+  products?: HoodieItem[];
 }
 
 export const StorePage: React.FC<StorePageProps> = ({
   onSelectHoodie,
   selectedSeries,
   onSeriesChange,
+  products = HOODIE_COLLECTION,
 }) => {
   const [selectedColor, setSelectedColor] = React.useState<string>('ALL');
   const [priceSort, setPriceSort] = React.useState<'default' | 'low-high' | 'high-low'>('default');
 
   // Filter and Sort Logic
   const filteredProducts = useMemo(() => {
-    return HOODIE_COLLECTION.filter((item) => {
+    return products.filter((item) => {
       if (selectedSeries !== 'ALL' && item.series !== selectedSeries) return false;
       if (selectedColor !== 'ALL' && !item.availableColors.includes(selectedColor)) return false;
       return true;
@@ -29,16 +31,16 @@ export const StorePage: React.FC<StorePageProps> = ({
       if (priceSort === 'high-low') return b.price - a.price;
       return 0;
     });
-  }, [selectedSeries, selectedColor, priceSort]);
+  }, [products, selectedSeries, selectedColor, priceSort]);
 
   // First 16 items for 4x4 Grid
   const grid16 = filteredProducts.slice(0, 16);
   // 2 Big Monumental Showcase Pieces
-  const showcasePieces = HOODIE_COLLECTION.slice(0, 2);
+  const showcasePieces = products.slice(0, 2);
   // Post-Showcase Archival & One Piece Expansion Pieces (items 16+)
-  const postShowcasePieces = HOODIE_COLLECTION.slice(16);
+  const postShowcasePieces = products.slice(16);
 
-  const seriesTabs = ['ALL', 'ONE-PIECE', 'JJK', 'BERSERK', 'DBS', 'BESPOKE'];
+  const seriesTabs = ['ALL', 'ONE-PIECE', 'JJK', 'BERSERK', 'DBS'];
   const colorOptions = ['ALL', 'onyx', 'bone', 'mud', 'charcoal', 'moss', 'crimson'];
 
   return (
@@ -121,14 +123,14 @@ export const StorePage: React.FC<StorePageProps> = ({
         <div className="flex justify-between items-end mb-6 sm:mb-8">
           <div>
             <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--text-muted)] block mb-1">
-              SPECIMEN MATRIX
+              CURATED MATRIX
             </span>
             <h2 className="text-xl sm:text-2xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase">
-              THE 4×4 GARMENT VAULT
+              THE 4×4 COLLECTION
             </h2>
           </div>
           <span className="text-xs font-mono text-[var(--text-secondary)]">
-            SHOWING {grid16.length} OF {HOODIE_COLLECTION.length}
+            SHOWING {grid16.length} OF {products.length}
           </span>
         </div>
 
@@ -217,14 +219,14 @@ export const StorePage: React.FC<StorePageProps> = ({
                   {showcase.name}
                 </h3>
                 <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed line-clamp-3">
-                  {showcase.description || '500GSM custom-milled loopback French terry. Hand-brushed discharge ink cured at 180°C.'}
+                  {showcase.description || 'Heavyweight 100% cotton fleece with high-density original graphic.'}
                 </p>
                 <div className="pt-2 flex items-center justify-between">
                   <span className="text-lg sm:text-xl font-mono text-[var(--text-primary)] font-bold tabular-nums">
                     ${showcase.price}.00
                   </span>
                   <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider group-hover:underline">
-                    INSPECT SPECIMEN →
+                    INSPECT PIECE →
                   </span>
                 </div>
               </div>
@@ -239,15 +241,15 @@ export const StorePage: React.FC<StorePageProps> = ({
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
             <div>
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--text-muted)] block mb-1">
-                LORE EXPANSION // GRAND LINE ARCHIVE
+                LORE EXPANSION
               </span>
               <h2 className="text-xl sm:text-2xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase flex items-center gap-2">
                 <Compass className="w-5 h-5 text-[var(--accent)]" />
-                ONE PIECE & NEW COMMISSIONS
+                ONE PIECE & ADDITIONAL EDITIONS
               </h2>
             </div>
             <span className="text-xs font-mono text-[var(--text-secondary)]">
-              {postShowcasePieces.length} ADDITIONAL ATELIER PIECES
+              {postShowcasePieces.length} ADDITIONAL PIECES
             </span>
           </div>
 

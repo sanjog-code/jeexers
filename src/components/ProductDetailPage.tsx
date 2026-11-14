@@ -204,7 +204,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
             </button>
             <p className="text-[11px] font-mono tracking-wider text-[var(--text-muted)] text-center uppercase">
-              500GSM Custom Heavyweight French Terry • Hand-Finished in Kojima
+              Heavyweight 100% Cotton Fleece • Oversized Streetwear Fit
             </p>
           </div>
         </div>

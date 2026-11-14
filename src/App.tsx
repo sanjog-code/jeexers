@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { PageView, CartEntry } from './types';
 import type { HoodieItem } from './data/products';
-import { HOODIE_COLLECTION } from './data/products';
+import { HOODIE_COLLECTION, getActiveCatalog } from './data/products';
 import { Header } from './components/Header';
 import { StorePage } from './components/StorePage';
 import { CollectionsPage } from './components/CollectionsPage';
@@ -12,6 +12,7 @@ import { BagDrawer } from './components/BagDrawer';
 import { CheckoutSpace } from './components/CheckoutSpace';
 import { Footer } from './components/Footer';
 import { ProceduralHoodie } from './components/ProceduralHoodie';
+import { AdminPanel } from './components/AdminPanel';
 
 interface FlyingHoodie {
   id: number;
@@ -24,9 +25,10 @@ interface FlyingHoodie {
 }
 
 export const App: React.FC = () => {
+  const [catalog, setCatalog] = useState<HoodieItem[]>(getActiveCatalog);
   const [currentPage, setCurrentPage] = useState<PageView>('store');
   const [selectedSeries, setSelectedSeries] = useState<string>('ALL');
-  const [selectedHoodie, setSelectedHoodie] = useState<HoodieItem>(HOODIE_COLLECTION[0]);
+  const [selectedHoodie, setSelectedHoodie] = useState<HoodieItem>(() => getActiveCatalog()[0] || HOODIE_COLLECTION[0]);
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [isBagOpen, setIsBagOpen] = useState<boolean>(false);
   const [theme, setTheme] = useState<'obsidian' | 'alabaster'>('obsidian');
@@ -35,6 +37,31 @@ export const App: React.FC = () => {
   const [bagAnimationState, setBagAnimationState] = useState<'idle' | 'unzipping' | 'open' | 'zipping' | 'impact'>('idle');
   const [flyingHoodie, setFlyingHoodie] = useState<FlyingHoodie | null>(null);
   const bagIconRef = useRef<HTMLButtonElement | null>(null);
+
+  // Hidden Admin Trigger Listeners (Hash '#admin' & 'Ctrl+Shift+A')
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#admin' || window.location.hash === '#atelier-admin') {
+        setCurrentPage('admin');
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Secret Key Combination: Ctrl + Shift + A (or Cmd + Shift + A)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setCurrentPage((prev) => (prev === 'admin' ? 'store' : 'admin'));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Synchronize Theme Attribute on Document Root
   useEffect(() => {
@@ -231,16 +258,18 @@ export const App: React.FC = () => {
             onSelectHoodie={handleSelectHoodie}
             selectedSeries={selectedSeries}
             onSeriesChange={setSelectedSeries}
+            products={catalog}
           />
         )}
 
         {currentPage === 'collections' && (
           <CollectionsPage
             onSelectHoodie={handleSelectHoodie}
-            onNavigateToBespoke={() => {
+            onNavigateToCustom={() => {
               setCurrentPage('bespoke');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            products={catalog}
           />
         )}
 
@@ -256,13 +285,34 @@ export const App: React.FC = () => {
           <BespokePage onBespokeOrder={handleBespokeOrder} />
         )}
 
-        {currentPage === 'studio' && <StudioPage />}
+        {currentPage === 'studio' && (
+          <StudioPage
+            onNavigateToCustom={() => {
+              setCurrentPage('bespoke');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        )}
 
         {currentPage === 'checkout' && (
           <CheckoutSpace
             cart={cart}
             onBack={() => setCurrentPage('store')}
             onOrderSuccess={() => setCart([])}
+          />
+        )}
+
+        {currentPage === 'admin' && (
+          <AdminPanel
+            catalog={catalog}
+            onUpdateCatalog={(newCatalog) => setCatalog(newCatalog)}
+            onExit={() => {
+              setCurrentPage('store');
+              if (window.location.hash.includes('admin')) {
+                history.replaceState(null, '', window.location.pathname);
+              }
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
       </main>
@@ -289,6 +339,10 @@ export const App: React.FC = () => {
         }}
         onSelectSeries={(series) => {
           setSelectedSeries(series);
+        }}
+        onOpenAdmin={() => {
+          setCurrentPage('admin');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
     </div>

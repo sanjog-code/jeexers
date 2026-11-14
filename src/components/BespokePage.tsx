@@ -198,10 +198,10 @@ export const BespokePage: React.FC<BespokePageProps> = ({ onBespokeOrder }) => {
         <div className="lg:col-span-5 space-y-7">
           <div>
             <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--text-muted)] block">
-              ATELIER BESPOKE SUITE
+              CUSTOM HOODIE STUDIO
             </span>
             <h1 className="text-3xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase mt-1">
-              CUSTOM SPECIMEN
+              CUSTOM 1-OF-1 HOODIE
             </h1>
             <div className="mt-1 text-2xl font-mono text-[var(--text-primary)] font-bold tabular-nums">
               $260.00
@@ -440,7 +440,7 @@ export const BespokePage: React.FC<BespokePageProps> = ({ onBespokeOrder }) => {
           {/* Size Matrix */}
           <div>
             <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[var(--text-secondary)] mb-2">
-              SIZE (HEAVYWEIGHT 500GSM FIT)
+              SIZE (BOXY OVERSIZED FIT)
             </div>
             <div className="grid grid-cols-5 gap-2">
               {['S', 'M', 'L', 'XL', 'XXL'].map((s) => (
@@ -478,7 +478,7 @@ export const BespokePage: React.FC<BespokePageProps> = ({ onBespokeOrder }) => {
               strength={0.3}
               className="w-full py-4 text-xs font-mono tracking-[0.25em] uppercase font-bold rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)] shadow-lg flex items-center justify-center"
             >
-              <span>LOCK IN BESPOKE COMMISSION ($260)</span>
+              <span>LOCK IN CUSTOM COMMISSION ($260)</span>
             </InteractiveMagnetic>
           )}
         </div>

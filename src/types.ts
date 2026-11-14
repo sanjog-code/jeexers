@@ -1,6 +1,6 @@
 import type { HoodieItem } from './data/products';
 
-export type PageView = 'store' | 'collections' | 'detail' | 'bespoke' | 'studio' | 'checkout';
+export type PageView = 'store' | 'collections' | 'detail' | 'bespoke' | 'studio' | 'checkout' | 'admin';
 
 export interface CartEntry {
   id: string;

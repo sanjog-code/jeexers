@@ -6,19 +6,21 @@ import { ArrowUpRight } from 'lucide-react';
 
 interface CollectionsPageProps {
   onSelectHoodie: (item: HoodieItem) => void;
-  onNavigateToBespoke: () => void;
+  onNavigateToCustom: () => void;
+  products?: HoodieItem[];
 }
 
 export const CollectionsPage: React.FC<CollectionsPageProps> = ({
   onSelectHoodie,
-  onNavigateToBespoke,
+  onNavigateToCustom,
+  products = HOODIE_COLLECTION,
 }) => {
   const [activeTab, setActiveTab] = useState<string>('all');
 
-  const onePieceItems = HOODIE_COLLECTION.filter((i) => i.series === 'ONE-PIECE');
-  const jjkItems = HOODIE_COLLECTION.filter((i) => i.series === 'JJK');
-  const berserkItems = HOODIE_COLLECTION.filter((i) => i.series === 'BERSERK');
-  const dbsItems = HOODIE_COLLECTION.filter((i) => i.series === 'DBS');
+  const onePieceItems = products.filter((i) => i.series === 'ONE-PIECE');
+  const jjkItems = products.filter((i) => i.series === 'JJK');
+  const berserkItems = products.filter((i) => i.series === 'BERSERK');
+  const dbsItems = products.filter((i) => i.series === 'DBS');
 
   const categories = [
     {
@@ -67,7 +69,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
           THE ARCHIVE COLLECTIONS
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
-          Garments categorized by sacred anime lore — featuring the newly commissioned <strong>One Piece Liberation Archive</strong>, alongside Jujutsu Kaisen, Berserk, and Dragon Ball Super. Produced in 500GSM heavyweight Japanese loopback French terry.
+          Garments categorized by anime lore — featuring One Piece, Jujutsu Kaisen, Berserk, and Dragon Ball Super. Crafted from heavyweight 100% cotton fleece with original back and front graphics.
         </p>
 
         {/* Tab Filters */}
@@ -81,7 +83,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                 : 'text-[var(--text-secondary)] border border-[var(--border-hairline)]'
             }`}
           >
-            ALL ARCHIVES ({HOODIE_COLLECTION.length})
+            ALL ARCHIVES ({products.length})
           </button>
           {categories.map((c) => (
             <button
@@ -162,25 +164,25 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
         </section>
       ))}
 
-      {/* 1-OF-1 Bespoke Chapter Banner */}
+      {/* Custom Hoodies Studio Banner */}
       <section className="p-6 sm:p-14 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8">
         <div className="space-y-2 sm:space-y-3 max-w-xl text-left">
           <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--accent)] font-bold">
-            1-OF-1 BESPOKE COMMISSION
+            CUSTOM HOODIES — 1-OF-1 COMMISSIONS
           </span>
           <h2 className="text-xl sm:text-3xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase">
             COMMISSION YOUR OWN ANIME HOODIE
           </h2>
           <p className="text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
-            Upload custom artwork or compose AI concept prompts with custom hex swatches and 8 distinct garment placement options. Hand-finished in Kojima.
+            Upload custom artwork or create custom concepts with our curated color swatches and garment placement options.
           </p>
         </div>
         <button
           type="button"
-          onClick={onNavigateToBespoke}
+          onClick={onNavigateToCustom}
           className="w-full md:w-auto py-3.5 sm:py-4 px-8 rounded-xl bg-[var(--text-primary)] text-[var(--bg-canvas)] text-xs font-mono tracking-[0.25em] uppercase font-bold hover:opacity-90 flex items-center justify-center gap-2 shadow-xl whitespace-nowrap focus:outline-none"
         >
-          <span>ENTER BESPOKE LAB</span>
+          <span>OPEN CUSTOM STUDIO</span>
           <ArrowUpRight className="w-4 h-4" />
         </button>
       </section>

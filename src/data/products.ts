@@ -1,7 +1,7 @@
 export interface HoodieItem {
   id: string;
   name: string;
-  series: 'JJK' | 'BERSERK' | 'DBS' | 'ONE-PIECE' | 'BESPOKE';
+  series: 'JJK' | 'BERSERK' | 'DBS' | 'ONE-PIECE' | 'CUSTOM' | 'BESPOKE';
   price: number;
   graphicType:
     | 'jjk-shrine'
@@ -18,6 +18,7 @@ export interface HoodieItem {
   availableColors: string[];
   description?: string;
   hasFrontDesign?: boolean;
+  customArtworkUrl?: string;
 }
 
 export const HOODIE_COLLECTION: HoodieItem[] = [
@@ -30,7 +31,7 @@ export const HOODIE_COLLECTION: HoodieItem[] = [
     graphicType: 'jjk-shrine',
     defaultColor: 'onyx',
     availableColors: ['onyx', 'charcoal', 'mud', 'crimson', 'bone'],
-    description: 'Malevolent Shrine architectural torii bone lattice brush discharge on 500GSM fleece.',
+    description: 'Malevolent Shrine architectural torii bone lattice brush discharge on heavyweight cotton fleece.',
     hasFrontDesign: true,
   },
   {
@@ -63,7 +64,7 @@ export const HOODIE_COLLECTION: HoodieItem[] = [
     graphicType: 'jjk-void',
     defaultColor: 'bone',
     availableColors: ['bone', 'onyx', 'charcoal'],
-    description: 'Deep cobalt pigment spill with raw discharge edges cured at 180°C.',
+    description: 'Deep cobalt pigment spill with raw discharge edges on heavyweight cotton fleece.',
     hasFrontDesign: true,
   },
 
@@ -214,7 +215,7 @@ export const HOODIE_COLLECTION: HoodieItem[] = [
     graphicType: 'jjk-shrine',
     defaultColor: 'onyx',
     availableColors: ['onyx', 'bone', 'crimson'],
-    description: 'Complete bodily cursed tattoo iconography etched directly into loopback fleece.',
+    description: 'Complete bodily cursed tattoo iconography etched directly into heavyweight cotton fleece.',
     hasFrontDesign: true,
   },
   {
@@ -241,13 +242,28 @@ export const HOODIE_COLLECTION: HoodieItem[] = [
   },
   {
     id: 'arch-04',
-    name: '1-OF-1 BESPOKE COMMISSION',
-    series: 'BESPOKE',
+    name: '1-OF-1 CUSTOM HOODIE COMMISSION',
+    series: 'CUSTOM',
     price: 260,
     graphicType: 'bespoke',
     defaultColor: 'mud',
     availableColors: ['onyx', 'bone', 'mud', 'charcoal', 'moss', 'crimson'],
-    description: 'Client commission crafted with custom artwork, placement and hand-mixed dyes.',
+    description: 'Client commission crafted with custom artwork, placement and high-density soft inks.',
     hasFrontDesign: true,
   },
 ];
+
+export const getActiveCatalog = (): HoodieItem[] => {
+  try {
+    const saved = localStorage.getItem('jeexers_custom_catalog');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch {
+    // fallback
+  }
+  return HOODIE_COLLECTION;
+};
