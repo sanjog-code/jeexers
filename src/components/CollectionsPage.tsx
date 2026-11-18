@@ -53,6 +53,13 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
     },
   ];
 
+  const categoryBanners: Record<string, string> = {
+    'one-piece': '/images/banners/banner-one-piece.jpg',
+    'jjk': '/images/banners/banner-jjk.jpg',
+    'berserk': '/images/banners/banner-berserk.jpg',
+    'dbs': '/images/banners/banner-dbs.jpg',
+  };
+
   const visibleCategories =
     activeTab === 'all'
       ? categories
@@ -105,21 +112,34 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
       {/* Category Chapters */}
       {visibleCategories.map((cat, catIdx) => (
         <section key={cat.id} className="space-y-6 sm:space-y-8 pt-10 border-t border-[var(--border-hairline)]">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-3 sm:gap-4">
-            <div>
-              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--text-muted)]">
-                SERIES 0{catIdx + 1}
-              </span>
-              <h2 className="text-xl sm:text-3xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase">
-                {cat.title}
-              </h2>
-              <p className="text-[11px] sm:text-xs text-[var(--text-secondary)] font-mono uppercase tracking-wider mt-1">
-                {cat.subtitle}
+          {/* Atmospheric Chapter Banner */}
+          <div className="relative rounded-3xl overflow-hidden border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-6 sm:p-10 flex flex-col justify-end min-h-[180px] sm:min-h-[220px]">
+            {categoryBanners[cat.id] && (
+              <img
+                src={categoryBanners[cat.id]}
+                alt={`${cat.title} atmospheric backdrop`}
+                className="absolute inset-0 w-full h-full object-cover object-center atelier-banner-img scale-105"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-canvas)] via-[var(--bg-canvas)]/80 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)] via-transparent to-black/30 pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-3 sm:gap-4 max-w-4xl">
+              <div>
+                <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--accent)] font-bold">
+                  CHAPTER 0{catIdx + 1} ARCHIVE
+                </span>
+                <h2 className="text-xl sm:text-3xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase mt-1">
+                  {cat.title}
+                </h2>
+                <p className="text-[11px] sm:text-xs text-[var(--text-secondary)] font-mono uppercase tracking-wider mt-1">
+                  {cat.subtitle}
+                </p>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)] max-w-md md:text-right font-sans leading-relaxed">
+                {cat.desc}
               </p>
             </div>
-            <p className="text-xs text-[var(--text-muted)] max-w-md md:text-right font-sans">
-              {cat.desc}
-            </p>
           </div>
 
           {/* Garments in this Category */}

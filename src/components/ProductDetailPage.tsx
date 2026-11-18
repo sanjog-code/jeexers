@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import type { HoodieItem } from '../data/products';
 import { ProceduralHoodie, HOODIE_COLORWAYS } from './ProceduralHoodie';
-import { ArrowLeft, Check, RotateCw, AlertTriangle, Layers } from 'lucide-react';
+import { ArrowLeft, Check, RotateCw, AlertTriangle, Layers, Camera, Sparkles, Eye } from 'lucide-react';
 
 interface ProductDetailPageProps {
   hoodie: HoodieItem;
@@ -23,9 +23,29 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [selectedView, setSelectedView] = useState<'front' | 'back'>(
     hoodie.hasFrontDesign ? 'back' : 'back'
   );
+  const [specimenMode, setSpecimenMode] = useState<'cad' | 'onbody' | 'texture'>('cad');
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL' | 'XXL'>('L');
   const [addedAnimation, setAddedAnimation] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
+
+  // Helper to determine the on-body editorial image for this item
+  const getLookbookImage = () => {
+    const s = hoodie.series.toLowerCase();
+    const id = hoodie.id.toLowerCase();
+    if (s.includes('piece') || id.includes('op')) {
+      return id.includes('straw') ? '/images/lookbook/model-05-night.jpg' : '/images/lookbook/model-01-shibuya.jpg';
+    }
+    if (s.includes('jujutsu') || s.includes('jjk') || id.includes('jjk')) {
+      return '/images/lookbook/model-02-cowl.jpg';
+    }
+    if (s.includes('berserk') || id.includes('berserk') || id.includes('brs')) {
+      return '/images/lookbook/model-06-brutalist.jpg';
+    }
+    if (s.includes('dragon') || s.includes('dbs') || s.includes('dbz') || id.includes('dbz')) {
+      return '/images/lookbook/model-03-bone.jpg';
+    }
+    return '/images/lookbook/model-04-cropped.jpg';
+  };
 
   // Stock check for currently chosen color and size
   const stock = hoodie.inventory?.[selectedColor]?.[selectedSize] ?? 12;
@@ -70,50 +90,147 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center flex-1">
         {/* Left: Cardless Floating Garment Specimen Space with Backlight */}
         <div className="lg:col-span-7 flex flex-col items-center justify-center relative">
-          {/* Live Hoodie Component */}
-          <div
-            ref={stageRef}
-            className="w-full max-w-lg aspect-square flex items-center justify-center transition-transform duration-700 ease-out hover:scale-105 relative"
-          >
-            <ProceduralHoodie
-              colorKey={selectedColor}
-              graphicType={hoodie.graphicType as any}
-              customImage={hoodie.customArtworkUrl}
-              silhouette={hoodie.silhouette || 'oversized'}
-              customPosition={hoodie.graphicPosition}
-              view={selectedView}
-              size="100%"
-              showBacklight={true}
-              hasFrontDesign={hoodie.hasFrontDesign}
-            />
+          {/* Specimen View Mode Selector */}
+          <div className="w-full max-w-lg mb-4 flex items-center justify-between border-b border-[var(--border-subtle)] pb-2 font-mono text-[10px] tracking-widest text-[var(--text-muted)]">
+            <span className="uppercase flex items-center gap-1.5">
+              <Eye className="w-3 h-3 text-[var(--accent)]" />
+              SPECIMEN VIEW
+            </span>
+            <div className="flex items-center space-x-1">
+              <button
+                type="button"
+                onClick={() => setSpecimenMode('cad')}
+                className={`px-2.5 py-1 rounded transition-colors uppercase ${
+                  specimenMode === 'cad'
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold'
+                    : 'hover:text-[var(--text-primary)]'
+                }`}
+              >
+                CAD FLAT
+              </button>
+              <button
+                type="button"
+                onClick={() => setSpecimenMode('onbody')}
+                className={`px-2.5 py-1 rounded transition-colors uppercase ${
+                  specimenMode === 'onbody'
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold'
+                    : 'hover:text-[var(--text-primary)]'
+                }`}
+              >
+                ON-BODY
+              </button>
+              <button
+                type="button"
+                onClick={() => setSpecimenMode('texture')}
+                className={`px-2.5 py-1 rounded transition-colors uppercase ${
+                  specimenMode === 'texture'
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold'
+                    : 'hover:text-[var(--text-primary)]'
+                }`}
+              >
+                FABRIC MACRO
+              </button>
+            </div>
           </div>
 
-          {/* Perspective View Switcher */}
-          <div className="mt-6 sm:mt-8 flex items-center space-x-3 font-mono text-xs tracking-[0.2em]">
-            <button
-              type="button"
-              onClick={() => setSelectedView('back')}
-              className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
-                selectedView === 'back'
-                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
-              }`}
-            >
-              <span>BACK ARTWORK</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedView('front')}
-              className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
-                selectedView === 'front'
-                  ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
-              }`}
-            >
-              <RotateCw className="w-3 h-3" />
-              <span>FRONT SILHOUETTE {hoodie.hasFrontDesign ? '(CHEST EMBLEM)' : ''}</span>
-            </button>
+          {/* Garment Stage Container */}
+          <div
+            ref={stageRef}
+            className="w-full max-w-lg aspect-square flex items-center justify-center transition-transform duration-700 ease-out relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/40 backdrop-blur-sm"
+          >
+            {specimenMode === 'cad' && (
+              <div className="w-full h-full flex items-center justify-center p-4">
+                <ProceduralHoodie
+                  colorKey={selectedColor}
+                  graphicType={hoodie.graphicType as any}
+                  customImage={hoodie.customArtworkUrl}
+                  silhouette={hoodie.silhouette || 'oversized'}
+                  customPosition={hoodie.graphicPosition}
+                  view={selectedView}
+                  size="100%"
+                  showBacklight={true}
+                  hasFrontDesign={hoodie.hasFrontDesign}
+                />
+              </div>
+            )}
+
+            {specimenMode === 'onbody' && (
+              <div className="w-full h-full relative group overflow-hidden">
+                <img
+                  src={getLookbookImage()}
+                  alt={`${hoodie.name} on-body editorial`}
+                  className="w-full h-full object-cover object-center atelier-editorial-img"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/30 pointer-events-none" />
+                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-[10px] font-mono tracking-widest text-[var(--text-muted)] pointer-events-none">
+                  <div>
+                    <span className="text-[var(--accent)] font-semibold uppercase">ARCHIVAL EDITORIAL</span>
+                    <div className="text-[var(--text-primary)] font-bold uppercase">{hoodie.series} // SPECIMEN 01</div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded border border-[var(--border-subtle)] bg-[var(--bg-canvas)]/60 backdrop-blur-sm text-[var(--text-secondary)]">
+                    35MM FILM
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {specimenMode === 'texture' && (
+              <div className="w-full h-full relative group overflow-hidden">
+                <img
+                  src="/images/textures/cotton-loopback-macro.jpg"
+                  alt="Raw cotton loopback weave texture"
+                  className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-[var(--bg-canvas)]/20 to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 right-4 text-[10px] font-mono tracking-widest text-[var(--text-secondary)] pointer-events-none">
+                  <div className="flex items-center gap-1.5 text-[var(--accent)] font-bold uppercase mb-1">
+                    <Sparkles className="w-3 h-3" />
+                    CROSS-KNIT LOOPBACK TERRY
+                  </div>
+                  <div className="text-[var(--text-primary)] text-xs font-semibold uppercase">
+                    500-THREAD RING-SPUN COTTON
+                  </div>
+                  <div className="text-[9px] text-[var(--text-muted)] mt-1">
+                    Double-needle safety lockstitch · Low-tension knit · Zero pill fleece
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Perspective View Switcher (Only active when in CAD flat view) */}
+          {specimenMode === 'cad' ? (
+            <div className="mt-6 sm:mt-8 flex items-center space-x-3 font-mono text-xs tracking-[0.2em]">
+              <button
+                type="button"
+                onClick={() => setSelectedView('back')}
+                className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
+                  selectedView === 'back'
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
+                }`}
+              >
+                <span>BACK ARTWORK</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedView('front')}
+                className={`px-4 py-2 rounded-full transition-all focus:outline-none flex items-center gap-1.5 ${
+                  selectedView === 'front'
+                    ? 'bg-[var(--text-primary)] text-[var(--bg-canvas)] font-bold shadow'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-hairline)]'
+                }`}
+              >
+                <RotateCw className="w-3 h-3" />
+                <span>FRONT SILHOUETTE {hoodie.hasFrontDesign ? '(CHEST EMBLEM)' : ''}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="mt-6 sm:mt-8 text-[11px] font-mono tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-2">
+              <Camera className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span>ATELIER ARCHIVE // ON-LOCATION SPECIMEN ARCHITECTURE</span>
+            </div>
+          )}
         </div>
 
         {/* Right: Architectural Config Form */}

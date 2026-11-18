@@ -63,6 +63,60 @@ export const StudioPage: React.FC<StudioPageProps> = ({ onNavigateToCustom }) =>
         </div>
       </div>
 
+      {/* Atelier Craftsmanship & Texture Visuals */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--accent)] font-bold">
+            MATERIALITY & FABRICATION
+          </span>
+          <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase">
+            ATELIER LAB SPECIFICATIONS
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="group relative rounded-2xl overflow-hidden aspect-[16/10] border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/textures/cotton-loopback-macro.jpg"
+              alt="Macro view of loopback cotton fleece"
+              className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+              <span className="text-[9px] font-mono text-[var(--accent)] font-semibold uppercase tracking-widest block">
+                TEXTILE WEAVE // CROSS-KNIT
+              </span>
+              <h4 className="text-xs font-mono font-bold uppercase text-[var(--text-primary)]">
+                HEAVYWEIGHT RING-SPUN LOOPBACK
+              </h4>
+              <p className="text-[10px] text-[var(--text-secondary)] font-sans mt-0.5">
+                Dense interior loops wick moisture while preserving structured silhouette geometry without sagging.
+              </p>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl overflow-hidden aspect-[16/10] border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/textures/fabric-grain-detail.jpg"
+              alt="Discharge ink pigmentation detail"
+              className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+              <span className="text-[9px] font-mono text-[var(--accent)] font-semibold uppercase tracking-widest block">
+                PRINT FINISH // MOLECULAR BOND
+              </span>
+              <h4 className="text-xs font-mono font-bold uppercase text-[var(--text-primary)]">
+                BREATHABLE DISCHARGE PIGMENTATION
+              </h4>
+              <p className="text-[10px] text-[var(--text-secondary)] font-sans mt-0.5">
+                Inks extract base cotton color and replace it with zero-hand soft pigments that age into vintage patina.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Practical Garment Care & Longevity */}
       <div className="p-6 sm:p-8 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-4">
         <h3 className="text-xs font-mono tracking-[0.25em] uppercase text-[var(--text-primary)] font-bold">

@@ -382,3 +382,32 @@ button:active:not(:disabled) {
 [data-theme="alabaster"] .fabric-noise {
   background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
 }
+
+/* Curated Online Asset Visual Harmonization */
+.atelier-editorial-img {
+  filter: grayscale(18%) contrast(112%) brightness(94%);
+  transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.atelier-editorial-img:hover {
+  filter: grayscale(0%) contrast(118%) brightness(100%);
+}
+
+.atelier-banner-img {
+  filter: grayscale(35%) contrast(120%) brightness(85%);
+  mix-blend-mode: luminosity;
+  opacity: 0.42;
+  transition: opacity 0.6s ease, filter 0.6s ease, transform 0.8s ease;
+}
+
+.atelier-macro-texture {
+  filter: contrast(125%) brightness(90%);
+  mix-blend-mode: hard-light;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.bg-noise-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+}
+

@@ -216,6 +216,9 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col font-sans transition-colors duration-300 relative overflow-x-hidden">
+      {/* Archival Tactile Film & Fabric Grain Overlay */}
+      <div className="fixed inset-0 pointer-events-none z-50 bg-noise-grain opacity-30 mix-blend-overlay" />
+
       {/* Product Collapsing into Dot & Flying into Backpack Opening */}
       {flyingHoodie && (
         <div

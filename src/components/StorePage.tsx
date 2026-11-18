@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { HoodieItem } from '../data/products';
 import { HOODIE_COLLECTION } from '../data/products';
 import { ProceduralHoodie, HOODIE_COLORWAYS } from './ProceduralHoodie';
-import { SlidersHorizontal, Sparkles, Compass, Search, X, Tag, Layers } from 'lucide-react';
+import { SlidersHorizontal, Sparkles, Compass, Search, X, Tag, Layers, Camera } from 'lucide-react';
 
 interface StorePageProps {
   onSelectHoodie: (item: HoodieItem) => void;
@@ -317,6 +317,84 @@ export const StorePage: React.FC<StorePageProps> = ({
             ))}
           </div>
         )}
+      </div>
+
+      {/* ===================== EDITORIAL LOOKBOOK: NOCTURNE ARCHIVE ===================== */}
+      <div className="pt-14 border-t border-[var(--border-hairline)] space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
+          <div>
+            <div className="flex items-center space-x-2 mb-1">
+              <Camera className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--accent)] font-bold">
+                CAMPAIGN NOCTURNE // 35MM EDITORIAL
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-hero font-bold tracking-tight text-[var(--text-primary)] uppercase">
+              ARCHIVAL ON-BODY LOOKBOOK
+            </h2>
+          </div>
+          <span className="text-xs font-mono text-[var(--text-secondary)]">
+            LOCATION // SHIBUYA & MIDLAND PROVINCES
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="group relative rounded-2xl overflow-hidden aspect-[3/4] border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/lookbook/model-01-shibuya.jpg"
+              alt="Shibuya Crossing on-body lookbook"
+              className="w-full h-full object-cover object-center atelier-editorial-img group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 text-[10px] font-mono pointer-events-none">
+              <div className="text-[var(--accent)] font-bold uppercase text-[9px]">SERIES I</div>
+              <div className="text-[var(--text-primary)] font-bold uppercase truncate">ONE PIECE // NIKA</div>
+              <div className="text-[var(--text-muted)] text-[8px] uppercase mt-0.5">OVERSIZED 500-THREAD</div>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl overflow-hidden aspect-[3/4] border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/lookbook/model-02-cowl.jpg"
+              alt="Jujutsu Kaisen cowl neck editorial"
+              className="w-full h-full object-cover object-center atelier-editorial-img group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 text-[10px] font-mono pointer-events-none">
+              <div className="text-[var(--accent)] font-bold uppercase text-[9px]">SERIES II</div>
+              <div className="text-[var(--text-primary)] font-bold uppercase truncate">JJK // SHRINE COWL</div>
+              <div className="text-[var(--text-muted)] text-[8px] uppercase mt-0.5">HIGH-NECK HOOD ARCHITECTURE</div>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl overflow-hidden aspect-[3/4] border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/lookbook/model-06-brutalist.jpg"
+              alt="Berserk brutalist sacrifice lookbook"
+              className="w-full h-full object-cover object-center atelier-editorial-img group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 text-[10px] font-mono pointer-events-none">
+              <div className="text-[var(--accent)] font-bold uppercase text-[9px]">SERIES III</div>
+              <div className="text-[var(--text-primary)] font-bold uppercase truncate">BERSERK // BRAND RELIC</div>
+              <div className="text-[var(--text-muted)] text-[8px] uppercase mt-0.5">WASHED CHARCOAL FLEECE</div>
+            </div>
+          </div>
+
+          <div className="group relative rounded-2xl overflow-hidden aspect-[3/4] border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+            <img
+              src="/images/lookbook/model-03-bone.jpg"
+              alt="Ultra Instinct silver bone editorial"
+              className="w-full h-full object-cover object-center atelier-editorial-img group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-canvas)]/90 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 text-[10px] font-mono pointer-events-none">
+              <div className="text-[var(--accent)] font-bold uppercase text-[9px]">SERIES IV</div>
+              <div className="text-[var(--text-primary)] font-bold uppercase truncate">DBS // SILVER AURA</div>
+              <div className="text-[var(--text-muted)] text-[8px] uppercase mt-0.5">RAW BONE TERRY FLEECE</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ===================== 2 BIG SHOWCASE PIECES ===================== */}
